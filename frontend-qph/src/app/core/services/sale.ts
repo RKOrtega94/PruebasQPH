@@ -16,7 +16,7 @@ export interface UpdateSaleRequest {
 
 @Injectable({ providedIn: 'root' })
 export class SaleService {
-  private readonly apiUrl = 'http://localhost:8080/api/sales';
+  private readonly apiUrl = '/api/sales';
 
   constructor(private http: HttpClient) {}
 

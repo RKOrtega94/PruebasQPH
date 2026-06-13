@@ -46,6 +46,9 @@
           <th pSortableColumn="product">Producto <p-sortIcon field="product"/></th>
           <th pSortableColumn="seller">Vendedor <p-sortIcon field="seller"/></th>
           <th pSortableColumn="quantity" style="width: 100px">Cantidad <p-sortIcon field="quantity"/></th>
+          <th pSortableColumn="total" style="width: 100px">Total
+            <p-sortIcon field="total"/>
+          </th>
           <th pSortableColumn="date" style="width: 120px">Fecha <p-sortIcon field="date"/></th>
           <th style="width: 100px; text-align: center">Acciones</th>
         </tr>
@@ -62,6 +65,7 @@
           </td>
           <td>{{ sale.seller }}</td>
           <td>{{ sale.quantity }}</td>
+          <td>{{ sale.total | currency }}</td>
           <td>{{ sale.date }}</td>
           <td>
             <div class="action-buttons">
@@ -80,7 +84,7 @@
 
       <ng-template pTemplate="emptymessage">
         <tr>
-          <td colspan="6">
+          <td colspan="7">
             <div class="empty-state">
               <i class="pi pi-inbox"></i>
               <span>{{ showMine ? 'No tienes ventas registradas' : 'No hay ventas registradas' }}</span>

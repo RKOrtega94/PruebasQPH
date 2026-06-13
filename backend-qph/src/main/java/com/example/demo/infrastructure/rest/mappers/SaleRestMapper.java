@@ -16,7 +16,8 @@ public class SaleRestMapper {
     }
 
     public SaleResponse toResponse(SaleResult result) {
-        return new SaleResponse(result.id(), result.product(), result.user(), result.quantity(), result.date());
+        return new SaleResponse(result.id(), result.product(), result.seller(), result.quantity(), result.date(),
+                result.total());
     }
 
     public UpdateSaleCommand toCommand(Long id, UpdateSaleRequest request) {

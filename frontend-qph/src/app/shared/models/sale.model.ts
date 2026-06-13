@@ -3,5 +3,6 @@ export interface Sale {
   product?: string;
   seller: string;
   quantity: number;
+  total: number;
   date: string;
 }

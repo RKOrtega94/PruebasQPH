@@ -7,13 +7,12 @@ import com.example.demo.data.repositories.UserRepository;
 import com.example.demo.data.services.commands.RegisterSaleCommand;
 import com.example.demo.data.services.commands.UpdateSaleCommand;
 import com.example.demo.data.services.results.SaleResult;
-import com.example.demo.domain.entities.Product;
 import com.example.demo.domain.entities.Sale;
-import com.example.demo.domain.entities.User;
 import com.example.demo.domain.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -39,12 +38,22 @@ public class SaleServiceImpl implements SaleService {
         var product = productRepository.findById(command.productId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
+        if (product.getStock() < command.quantity()) {
+            throw new ResourceNotFoundException("Insufficient stock for product: " + product.getNombre());
+        }
+
+        var total = product.getPrecio().multiply(BigDecimal.valueOf(command.quantity()));
+
         var sale = Sale.builder()
                 .product(product)
                 .user(user)
                 .quantity(command.quantity())
+                .total(total)
                 .date(LocalDate.now())
                 .build();
+
+        product.setStock(product.getStock() - command.quantity());
+        productRepository.save(product);
 
         return mapper.toResult(repository.save(sale));
     }
@@ -74,21 +83,41 @@ public class SaleServiceImpl implements SaleService {
         var sale = repository.findById(command.id())
                 .orElseThrow(() -> new ResourceNotFoundException("Sale not found"));
 
+        var product = sale.getProduct();
         if (command.productId() != null) {
-            var product = productRepository.findById(command.productId())
+            product = productRepository.findById(command.productId())
                     .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
             sale.setProduct(product);
         }
+
+        var oldQuantity = sale.getQuantity();
         mapper.update(command, sale);
+
+        var quantity = sale.getQuantity() != null ? sale.getQuantity() : 0;
+        var total = product.getPrecio().multiply(BigDecimal.valueOf(quantity));
+        sale.setTotal(total);
+
+        var stockDiff = quantity - oldQuantity;
+        var newStock = product.getStock() - stockDiff;
+        if (newStock < 0) {
+            throw new ResourceNotFoundException("Insufficient stock for product: " + product.getNombre());
+        }
+        product.setStock(newStock);
+        productRepository.save(product);
 
         return mapper.toResult(repository.save(sale));
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
-        if (!repository.existsById(id)) {
+        repository.findById(id).ifPresentOrElse(sale -> {
+            var product = sale.getProduct();
+            product.setStock(product.getStock() + sale.getQuantity());
+            productRepository.save(product);
+            repository.delete(sale);
+        }, () -> {
             throw new ResourceNotFoundException("Sale not found");
-        }
-        repository.deleteById(id);
+        });
     }
 }

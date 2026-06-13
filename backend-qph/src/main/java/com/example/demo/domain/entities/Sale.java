@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -27,6 +28,8 @@ public class Sale {
     private User user;
     @Column(name = "quantity")
     private Integer quantity;
+    @Column(name = "total", precision = 10, scale = 2)
+    private BigDecimal total;
     @CreatedDate
     @Column(name = "date")
     private LocalDate date;

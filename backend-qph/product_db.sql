@@ -1,16 +1,4 @@
 /******************************
--  Nombre:      1.- Creación de base de datos
--  Descripción: Definición y creación del contenedor principal
-               para el sistema de gestión de productos.
--  Tipo:        Estructura (Database)
--  Versión:     1.0
--  Autor:       Stalin Ladino
--  Fecha:       13-04-2026
-*******************************/
-CREATE DATABASE products_db;
-
-
-/******************************
 -  Nombre:      2.- Creación de tabla de productos
 -  Descripción: Definición y creación de la tabla principal
                que almacena el catálogo de productos con
@@ -44,6 +32,7 @@ create table if not exists public.sales
     product_id bigint references products (id) on delete cascade,
     user_id    bigint references users (id) on delete cascade,
     quantity   integer,
+    total numeric(38, 2),
     date       date,
     constraint sells_quantity_check check (quantity > 0)
 );

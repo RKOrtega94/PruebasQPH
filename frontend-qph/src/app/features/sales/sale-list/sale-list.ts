@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, CurrencyPipe, formatCurrency } from '@angular/common';
 import { Router } from '@angular/router';
 import { Sale } from '@/shared/models/sale.model';
 import { SaleService } from '@/core/services/sale';
@@ -10,11 +10,12 @@ import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Tooltip } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-sale-list',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, ConfirmDialogModule, ToastModule],
+  imports: [CommonModule, TableModule, ButtonModule, ConfirmDialogModule, ToastModule, Tooltip, CurrencyPipe],
   providers: [ConfirmationService, MessageService],
   templateUrl: './sale-list.html',
   styleUrl: './sale-list.scss',
@@ -36,9 +37,7 @@ export class SaleListComponent implements OnInit {
 
   loadSales(): void {
     this.loading = true;
-    const request = this.showMine
-      ? this.saleService.getByUser()
-      : this.saleService.getAll();
+    const request = this.showMine ? this.saleService.getByUser() : this.saleService.getAll();
 
     request.subscribe({
       next: (data) => {
@@ -107,4 +106,6 @@ export class SaleListComponent implements OnInit {
       },
     });
   }
+
+  protected readonly formatCurrency = formatCurrency;
 }

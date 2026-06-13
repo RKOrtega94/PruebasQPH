@@ -9,7 +9,8 @@ import org.springframework.stereotype.Component;
 public class SaleMapper {
 
     public SaleResult toResult(Sale sale) {
-        return new SaleResult(sale.getId(), sale.getProduct().getNombre(), sale.getUser().getUsername(), sale.getQuantity(), sale.getDate());
+        return new SaleResult(sale.getId(), sale.getProduct().getNombre(), sale.getUser().getUsername(),
+                sale.getQuantity(), sale.getDate(), sale.getTotal());
     }
 
     public void update(UpdateSaleCommand command, Sale sale) {
