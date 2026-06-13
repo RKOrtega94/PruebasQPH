@@ -1,0 +1,11 @@
+<div class="list-page">
+  <p-toast/>
+  <p-confirmDialog/>
+  <app-bar>
+    <ng-content select="[slot=title]"/>
+    <ng-content select="[slot=actions]"/>
+  </app-bar>
+  <div class="table-card">
+    <ng-content/>
+  </div>
+</div>

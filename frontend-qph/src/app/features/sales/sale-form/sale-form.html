@@ -1,0 +1,92 @@
+<div class="form-page">
+  <p-toast/>
+
+  <div class="form-header">
+    <p-button
+      icon="pi pi-arrow-left"
+      [text]="true"
+      severity="secondary"
+      (onClick)="goBack()"
+      styleClass="back-btn"
+    />
+    <div class="header-text">
+      <h1>Nueva Venta</h1>
+      <p>Selecciona el producto y la cantidad para registrar la venta</p>
+    </div>
+  </div>
+
+  <div class="form-container">
+    <div class="form-card">
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <div class="form-section">
+          <div class="section-label">
+            <i class="pi pi-shopping-cart"></i>
+            Detalles de la venta
+          </div>
+
+          <div class="field-group">
+            <label for="productId">Producto</label>
+            <p-select
+              id="productId"
+              formControlName="productId"
+              [options]="products"
+              optionLabel="nombre"
+              optionValue="id"
+              placeholder="Selecciona un producto"
+              styleClass="w-full"
+              [ngClass]="{'p-invalid': form.get('productId')?.invalid && form.get('productId')?.touched}"
+            />
+            @if (form.get('productId')?.invalid && form.get('productId')?.touched) {
+              <small class="field-error">
+                <i class="pi pi-exclamation-circle"></i>
+                Selecciona un producto
+              </small>
+            }
+          </div>
+
+          <div class="field-group">
+            <label for="quantity">Cantidad</label>
+            <p-inputNumber
+              id="quantity"
+              formControlName="quantity"
+              placeholder="0"
+              [min]="1"
+              styleClass="w-full"
+              inputStyleClass="w-full"
+              [ngClass]="{'p-invalid': form.get('quantity')?.invalid && form.get('quantity')?.touched}"
+            />
+            @if (form.get('quantity')?.invalid && form.get('quantity')?.touched) {
+              <small class="field-error">
+                <i class="pi pi-exclamation-circle"></i>
+                La cantidad debe ser mayor a 0
+              </small>
+            }
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <p-button
+            label="Cancelar"
+            icon="pi pi-times"
+            severity="secondary"
+            [outlined]="true"
+            type="button"
+            (onClick)="goBack()"
+          />
+          <p-button
+            label="Registrar venta"
+            icon="pi pi-check"
+            type="submit"
+            [loading]="submitting"
+            [disabled]="form.invalid"
+            styleClass="submit-btn"
+          />
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<div class="app-bar">
+  <div class="app-bar-left">
+    <div class="brand">
+      <span class="brand-name">QPH</span>
+    </div>
+    <nav class="nav-links">
+      @for (item of navItems; track $index) {
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+        >
+          <i [class]="item.icon"></i>
+          {{ item.label }}
+        </a>
+      }
+    </nav>
+  </div>
+  <div class="app-bar-right">
+    <p-button
+      icon="pi pi-sign-out"
+      [text]="true"
+      severity="secondary"
+      pTooltip="Cerrar sesión"
+      tooltipPosition="left"
+      (onClick)="logout.emit()"
+    />
+  </div>
+</div>

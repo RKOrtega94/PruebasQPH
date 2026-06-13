@@ -1,0 +1,108 @@
+<div class="form-page">
+  <div class="form-header">
+    <p-button
+      icon="pi pi-arrow-left"
+      [text]="true"
+      severity="secondary"
+      (onClick)="goBack()"
+      styleClass="back-btn"
+    />
+    <div class="header-text">
+      <h1>{{ isEdit ? 'Editar Usuario' : 'Nuevo Usuario' }}</h1>
+      <p>{{ isEdit ? 'Modifica los datos del usuario' : 'Completa el formulario para registrar un nuevo usuario' }}</p>
+    </div>
+  </div>
+
+  <div class="form-container">
+    <div class="form-card">
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <div class="form-section">
+          <div class="section-label">
+            <i class="pi pi-user"></i>
+            Información del usuario
+          </div>
+
+          <div class="field-group">
+            <label for="username">Nombre de usuario</label>
+            <input
+              pInputText
+              id="username"
+              formControlName="username"
+              placeholder="Ej: jperez"
+              [ngClass]="{'p-invalid': form.get('username')?.invalid && form.get('username')?.touched}"
+            />
+            @if (form.get('username')?.invalid && form.get('username')?.touched) {
+              <small class="field-error">
+                <i class="pi pi-exclamation-circle"></i>
+                @if (form.get('username')?.errors?.['required']) {
+                  El usuario es requerido
+                } @else {
+                  Mínimo 3 caracteres
+                }
+              </small>
+            }
+          </div>
+
+          <div class="field-group">
+            <label for="password">Contraseña</label>
+            <p-password
+              id="password"
+              formControlName="password"
+              placeholder="Mínimo 6 caracteres"
+              [feedback]="false"
+              [toggleMask]="true"
+              styleClass="w-full"
+              inputStyleClass="w-full"
+              [ngClass]="{'p-invalid': form.get('password')?.invalid && form.get('password')?.touched}"
+            />
+            @if (form.get('password')?.invalid && form.get('password')?.touched) {
+              <small class="field-error">
+                <i class="pi pi-exclamation-circle"></i>
+                @if (form.get('password')?.errors?.['required']) {
+                  La contraseña es requerida
+                } @else {
+                  Mínimo 6 caracteres
+                }
+              </small>
+            }
+          </div>
+
+          <div class="field-group">
+            <label>Estado</label>
+            <div class="active-toggle">
+              <p-button
+                [label]="form.get('active')?.value ? 'Activo' : 'Inactivo'"
+                [icon]="form.get('active')?.value ? 'pi pi-check-circle' : 'pi pi-times-circle'"
+                [styleClass]="form.get('active')?.value ? 'active-btn' : 'inactive-btn'"
+                (onClick)="form.patchValue({ active: !form.get('active')?.value })"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <p-button
+            label="Cancelar"
+            icon="pi pi-times"
+            severity="secondary"
+            [outlined]="true"
+            type="button"
+            (onClick)="goBack()"
+          />
+          <p-button
+            [label]="isEdit ? 'Guardar cambios' : 'Crear usuario'"
+            [icon]="isEdit ? 'pi pi-check' : 'pi pi-plus'"
+            type="submit"
+            [loading]="submitting"
+            [disabled]="form.invalid"
+            styleClass="submit-btn"
+          />
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>

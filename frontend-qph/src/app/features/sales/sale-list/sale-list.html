@@ -1,0 +1,99 @@
+<div class="sales-page">
+  <p-toast/>
+  <p-confirmDialog/>
+
+  <div class="page-header">
+    <div class="header-left">
+      <div class="header-icon">
+        <i class="pi pi-shopping-cart"></i>
+      </div>
+      <div class="header-text">
+        <h1>Ventas</h1>
+        <p>{{ sales.length }} venta{{ sales.length !== 1 ? 's' : '' }} registrada{{ sales.length !== 1 ? 's' : '' }}</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="filter-toggle">
+        <span class="filter-label" [class.active]="!showMine" (click)="showMine && toggleFilter()">Todas</span>
+        <div class="toggle-track" (click)="toggleFilter()">
+          <div class="toggle-thumb" [class.right]="showMine"></div>
+        </div>
+        <span class="filter-label" [class.active]="showMine" (click)="!showMine && toggleFilter()">Mis ventas</span>
+      </div>
+      <p-button
+        label="Nueva Venta"
+        icon="pi pi-plus"
+        styleClass="new-btn"
+        (onClick)="goToCreate()"
+      />
+    </div>
+  </div>
+
+  <div class="table-card">
+    <p-table
+      [value]="sales"
+      [loading]="loading"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      styleClass="p-datatable-sm"
+      [tableStyle]="{ 'min-width': '48rem' }"
+      [rowHover]="true"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="id" style="width: 80px">ID <p-sortIcon field="id"/></th>
+          <th pSortableColumn="product">Producto <p-sortIcon field="product"/></th>
+          <th pSortableColumn="seller">Vendedor <p-sortIcon field="seller"/></th>
+          <th pSortableColumn="quantity" style="width: 100px">Cantidad <p-sortIcon field="quantity"/></th>
+          <th pSortableColumn="date" style="width: 120px">Fecha <p-sortIcon field="date"/></th>
+          <th style="width: 100px; text-align: center">Acciones</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-sale>
+        <tr>
+          <td><span class="id-badge">#{{ sale.id }}</span></td>
+          <td>
+            <div class="product-name">
+              <i class="pi pi-box"></i>
+              {{ sale.product }}
+            </div>
+          </td>
+          <td>{{ sale.seller }}</td>
+          <td>{{ sale.quantity }}</td>
+          <td>{{ sale.date }}</td>
+          <td>
+            <div class="action-buttons">
+              <p-button
+                icon="pi pi-trash"
+                [rounded]="true"
+                [text]="true"
+                severity="danger"
+                pTooltip="Eliminar"
+                (onClick)="confirmDelete(sale)"
+              />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6">
+            <div class="empty-state">
+              <i class="pi pi-inbox"></i>
+              <span>{{ showMine ? 'No tienes ventas registradas' : 'No hay ventas registradas' }}</span>
+              <p-button
+                label="Registrar primera venta"
+                icon="pi pi-plus"
+                [text]="true"
+                (onClick)="goToCreate()"
+              />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
