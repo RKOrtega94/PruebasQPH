@@ -24,3 +24,8 @@ Proyecto de gestión de productos, usuarios y ventas.
 1. Clonar el repositorio.
 2. Ejecutar el comando `docker compose up -d` para levantar los contenedores.
 3. Abrir el navegador y acceder a la aplicación en la dirección `http://localhost:80`.
+
+## Creadenciales
+
+**Usuario:** admin
+**Contraseña:** admin123
